@@ -1,7 +1,7 @@
 package App::cpanmigrate;
 use strict;
 use warnings;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 local $SIG{__DIE__} = sub {
     my $msg = shift;
@@ -54,8 +54,12 @@ sub detect_shell {
 
     $self->{shell}{path} = $ENV{SHELL};
 
-    if ($self->{shell}{path} =~ /bash/) {
+    if ($self->{shell}{path} =~ /(bash|zsh)/) {
         $self->{shell}{name} = 'bash';
+        $self->{shell}{opts} = [ '-c' ];
+
+    } elsif ($self->{shell}{path} =~ /(csh)/) {
+        $self->{shell}{name} = 'csh';
         $self->{shell}{opts} = [ '-c' ];
 
     } else {
@@ -84,7 +88,11 @@ C<cpanmigrate> is integrated with L<App::cpanminus> and L<App::perlbrew>.
 
 =over 4
 
-=item * C<bash> on Linux
+=item * C<bash>
+
+=item * C<zsh>
+
+=item * C<csh>
 
 =back
 
@@ -92,13 +100,17 @@ C<cpanmigrate> is integrated with L<App::cpanminus> and L<App::perlbrew>.
 
 Take a look at L<App::cpanmigrate::bash>. The main part of development is writing shell script.
 
-Additionally, write some logic to detect shell. See also C<App::cpanmigrate->detect_shell()>.
+Additionally, write some logic to detect shell. See also C<< App::cpanmigrate->detect_shell() >>.
 
 Then, please send me a pull request at L<https://github.com/punytan/p5-App-cpanmigrate> :)
 
 =head1 AUTHOR
 
 punytan E<lt>punytan@gmail.comE<gt>
+
+=head1 CONTRIBUTORS
+
+toritori0318 - patches for C<zsh> and C<csh>
 
 =head1 SEE ALSO
 
